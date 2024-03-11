@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "react-app",
+    "plugin:prettier/recommended",
+    "plugin:import/typescript"
+  ],
+  "plugins": ["prettier", "import"],
+  "parser": "@typescript-eslint/parser",
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": "./tsconfig.json"
+      }
+    }
+  },
+  "rules": {
+    "prettier/prettier": ["error"],
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "import/newline-after-import": "warn"
+  }
+}
