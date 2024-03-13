@@ -14,7 +14,7 @@ export const miroApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://api.miro.com/v2/boards/',
     prepareHeaders(headers) {
-      const token = process.env['REACT_APP_MIRO_KEY']
+      const token = 'eyJtaXJvLm9yaWdpbiI6ImV1MDEifQ_P-aXMiVk_w4erGuKtZNNV0MgqbI'
       if (token && !headers.has('Authorization')) {
         headers.set('Authorization', `Bearer ${token}`)
       }

@@ -18,7 +18,7 @@ export const airtableApi = createApi({
   }),
   endpoints: builder => ({
     getHomework: builder.query<GetAirTableResponse, GetAirTablePayload>({
-      query: payload => `${payload.baseId}/${payload.tableId}`,
+      query: payload => `${payload.baseId}/${payload.tableId}?sort[0][direction]=asc&sort[0][field]=Date`,
     }),
   }),
 })

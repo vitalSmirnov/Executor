@@ -22,7 +22,16 @@ export const HomeWorkDownloadButton = () => {
   const tableId = localStorage.getItem('airtableName')
   const airtableBaseId = localStorage.getItem('airtableId')
   const miroId = localStorage.getItem('miroId')
-  const { data, isError } = useGetHomeworkQuery({ tableId: tableId!, baseId: airtableBaseId! })
+  const { data, isError } = useGetHomeworkQuery({
+    tableId: tableId!,
+    baseId: airtableBaseId!,
+    sort: [
+      {
+        field: 'createdTime',
+        direction: 'desc',
+      },
+    ],
+  })
   const [createCard] = useCreateCardMutation()
   const [createStickyNote] = useCreateStickyNoteMutation()
   const [createImage] = useCreateImageMutation()
@@ -48,13 +57,27 @@ export const HomeWorkDownloadButton = () => {
         },
         position: centeredViewport,
       })
-      await createStickyNote({
-        boardId: miroId!,
-        data: {
-          content: item.fields.Comment,
-        },
-        position: { x: centeredViewport.x - 300, y: centeredViewport.y },
-      })
+      const valueOfStickies = item.fields.Comment.length / 1999
+
+      if (valueOfStickies > 1) {
+        for (let part = 0; part < valueOfStickies; part += 1) {
+          await createStickyNote({
+            boardId: miroId!,
+            data: {
+              content: item.fields.Comment.slice(part * 2000, (part + 1) * 2000 - 1),
+            },
+            position: { x: centeredViewport.x - 300, y: centeredViewport.y + part * 230 },
+          })
+        }
+      } else {
+        await createStickyNote({
+          boardId: miroId!,
+          data: {
+            content: item.fields.Comment,
+          },
+          position: { x: centeredViewport.x - 300, y: centeredViewport.y },
+        })
+      }
 
       item.fields.Work.map(async (image, number) => {
         await createImage({
