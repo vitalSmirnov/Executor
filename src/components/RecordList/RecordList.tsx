@@ -18,7 +18,12 @@ export const RecordList = ({ data }: RecordListProps) => {
           />
           <div className={styles.list}>
             {data!.records.map(item => {
-              return <RecordListItem title={item.fields.Name} />
+              return (
+                <RecordListItem
+                  key={item.id}
+                  title={item.fields.Name}
+                />
+              )
             })}
           </div>
         </>
