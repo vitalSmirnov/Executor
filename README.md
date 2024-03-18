@@ -28,7 +28,6 @@
 │  ├── entities // describe objects what used in scripts
 │  ├── shared // whole project used scripts
 │  │  └── api // Web SDK and REST Api
-│  │  └── ApiRoutes // enum of REST Api routes
 │  │  └── store // state manager of app
 │  │  └── ui // base styled components 
 │  └── app.tsx    // The code for the app lives here

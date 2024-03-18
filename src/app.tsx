@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import '../src/assets/style.css'
 import { Provider } from 'react-redux'
 import { store } from './shared/store/store'
-import { Main } from './widgets/app/main'
+import { Main } from './app/main'
 
 const App: React.FC = () => {
   return (
