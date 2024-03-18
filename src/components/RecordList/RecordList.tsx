@@ -8,6 +8,8 @@ interface RecordListProps {
 }
 
 export const RecordList = ({ data }: RecordListProps) => {
+  const listStyle = data.records.length > 5 ? styles.list + ' ' + styles.scrollable : styles.list
+
   return (
     <div>
       {data ? (
@@ -16,7 +18,7 @@ export const RecordList = ({ data }: RecordListProps) => {
             level={5}
             children={`${data.records.length} - claimed homework`}
           />
-          <div className={styles.list}>
+          <div className={listStyle}>
             {data!.records.map(item => {
               return (
                 <RecordListItem
