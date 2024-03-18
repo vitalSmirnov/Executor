@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { TopicHeader } from '../../shared/ui/TopicHeader'
 import { Input } from '../../shared/ui/Input'
 import { Button } from '../../shared/ui/button'
+import { setEnvVariables } from './helpers'
 
 export const Auth = () => {
   const [airtableApiKey, setApiKey] = useState(localStorage.getItem('airtableApi'))
@@ -9,15 +10,6 @@ export const Auth = () => {
   const [airtableBaseId, setBaseId] = useState(localStorage.getItem('airtableId'))
   const [miroId, setMiroId] = useState(localStorage.getItem('miroId'))
   const [danger, setDanger] = useState(false)
-
-  const setVariables = () => {
-    if (!danger) {
-      localStorage.setItem('miroId', miroId!)
-      localStorage.setItem('airtableId', airtableBaseId!)
-      localStorage.setItem('airtableName', airtableBoardName!)
-      localStorage.setItem('airtableApi', airtableApiKey!)
-    }
-  }
 
   useEffect(() => {
     if (miroId && airtableBaseId && airtableBoardName && airtableApiKey) {
@@ -59,7 +51,14 @@ export const Auth = () => {
           onChange={setMiroId}
         />
         <Button
-          onClick={setVariables}
+          onClick={() =>
+            setEnvVariables({
+              miroId: miroId!,
+              airtableBaseId: airtableBaseId!,
+              airtableBoardName: airtableBoardName!,
+              airtableApiKey: airtableApiKey!,
+            })
+          }
           title={'Set env variables'}
         />
       </form>
