@@ -5,10 +5,10 @@ export interface Record {
 }
 
 export interface Field {
-  Comment: string
+  Notes: string
   Name: string
   Date: string
-  Work: Work[]
+  Attachments: Work[]
 }
 
 export interface Work {
