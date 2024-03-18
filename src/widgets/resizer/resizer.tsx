@@ -9,16 +9,13 @@ export const Resizer = () => {
   const resizerHandler = async () => {
     await resizeHandler(selectedSize)
   }
-  const sizeHandler = (value: number) => {
-    setSize(Number(value))
-  }
 
   return (
     <>
       <TopicHeader children={'Resizer'} />
       <Input<number>
         label={'Size'}
-        onChange={sizeHandler}
+        onChange={e => setSize(e)}
         value={selectedSize}
       />
       <Button
