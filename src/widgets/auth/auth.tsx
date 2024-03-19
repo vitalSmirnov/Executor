@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
-import { TopicHeader } from '../../shared/ui/TopicHeader'
-import { Input } from '../../shared/ui/Input'
-import { Button } from '../../shared/ui/button'
+import { TopicHeader } from '../../shared'
+import { Input } from '../../shared'
+import { Button } from '../../shared'
 import { setEnvVariables } from './helpers'
 
-export const Auth = () => {
+interface AuthProps {
+  errorCallback: () => void
+}
+export const Auth = ({ errorCallback }: AuthProps) => {
   const [airtableApiKey, setApiKey] = useState(localStorage.getItem('airtableApi'))
   const [airtableBoardName, setBoardName] = useState(localStorage.getItem('airtableName'))
   const [airtableBaseId, setBaseId] = useState(localStorage.getItem('airtableId'))
@@ -57,6 +60,7 @@ export const Auth = () => {
               airtableBaseId: airtableBaseId!,
               airtableBoardName: airtableBoardName!,
               airtableApiKey: airtableApiKey!,
+              errorCallback,
             })
           }
           title={'Set env variables'}

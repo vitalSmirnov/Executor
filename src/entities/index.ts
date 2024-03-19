@@ -1,3 +1,3 @@
 export * from './enums'
 export * from './dto'
-export * from './airTable'
+export * from './airTable/Record'

@@ -1,15 +1,21 @@
-import { RouteTabs } from '../components/routeTabs/routeTabs'
-import { HomeWorkDownloadButton } from '../widgets/exportHomework/homeWorkDownloadButton'
-import { Resizer } from '../widgets/resizer/resizer'
+import { RouteTabs } from '../components'
+import { Auth, HomeWorkDownloadButton } from '../widgets'
 import * as React from 'react'
 import { useState } from 'react'
 import { RouteEnum } from '../entities'
-import { Auth } from '../widgets/auth/auth'
 
 export const Main = () => {
   const [routing, setRoute] = useState(RouteEnum.HOMEWORK_EXPORT)
   const mainRouteHandler = (route: RouteEnum) => {
     setRoute(route)
+  }
+
+  const setAuth = () => {
+    setRoute(RouteEnum.AUTH)
+  }
+
+  const unsetAuth = () => {
+    setRoute(RouteEnum.HOMEWORK_EXPORT)
   }
 
   return (
@@ -19,9 +25,8 @@ export const Main = () => {
           route={routing}
           changeRouteCallback={mainRouteHandler}
         />
-        {routing === RouteEnum.HOMEWORK_EXPORT && <HomeWorkDownloadButton />}
-        {routing === RouteEnum.RESIZER && <Resizer />}
-        {routing === RouteEnum.AUTH && <Auth />}
+        {routing === RouteEnum.HOMEWORK_EXPORT && <HomeWorkDownloadButton errorCallback={setAuth} />}
+        {routing === RouteEnum.AUTH && <Auth errorCallback={unsetAuth} />}
       </div>
     </>
   )

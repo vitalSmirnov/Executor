@@ -3,15 +3,17 @@ import {
   useCreateImageMutation,
   useCreateStickyNoteMutation,
   useGetHomeworkQuery,
-} from '../../shared/api'
-import { RecordList } from '../../components/RecordList/RecordList'
-import { Button } from '../../shared/ui/button'
-import { Input } from '../../shared/ui/Input'
+} from '../../shared'
+import { RecordList } from '../../components'
+import { Button, Input, TopicHeader } from '../../shared'
 import { useState } from 'react'
-import { TopicHeader } from '../../shared/ui/TopicHeader'
 import { getCenterViewport } from './helpers'
 
-export const HomeWorkDownloadButton = () => {
+interface HomeWorkDownloadButtonProps {
+  errorCallback: () => void
+}
+
+export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButtonProps) => {
   const tableId = localStorage.getItem('airtableName')
   const airtableBaseId = localStorage.getItem('airtableId')
   const miroId = localStorage.getItem('miroId')
@@ -21,16 +23,14 @@ export const HomeWorkDownloadButton = () => {
 
   const [sizeValue, setSizeValue] = useState<number>(300)
 
-  const { data, isError } = useGetHomeworkQuery({
+  const { data, isFetching, isError } = useGetHomeworkQuery({
     tableId: tableId!,
     baseId: airtableBaseId!,
-    sort: [
-      {
-        field: 'createdTime',
-        direction: 'desc',
-      },
-    ],
   })
+
+  if (isError) {
+    errorCallback()
+  }
 
   const insertImages = async () => {
     const viewport = await miro.board.viewport.get()
@@ -91,7 +91,7 @@ export const HomeWorkDownloadButton = () => {
   return (
     <>
       <TopicHeader children={'Students homework'} />
-      <RecordList data={data!} />
+      {!isError && !isFetching && <RecordList data={data!} />}
       <Input<number>
         value={sizeValue}
         label={'Height'}

@@ -23,15 +23,6 @@ export const RouteTabs = ({ route, changeRouteCallback }: RouteTabsProps) => {
               <span className='icon icon-upload' />
             </div>
           </div>
-          <div className={`tab ${route === RouteEnum.RESIZER && 'tab-active'}`}>
-            <div
-              onClick={() => routerSetter(RouteEnum.RESIZER)}
-              className={'tab-text tab-badge'}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <span className='icon icon-tile' />
-            </div>
-          </div>
           <div className={`tab ${route === RouteEnum.AUTH && 'tab-active'}`}>
             <div
               onClick={() => routerSetter(RouteEnum.AUTH)}
