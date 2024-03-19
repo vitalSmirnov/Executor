@@ -8,16 +8,15 @@ export const Auth = () => {
   const [airtableApiKey, setApiKey] = useState(localStorage.getItem('airtableApi'))
   const [airtableBoardName, setBoardName] = useState(localStorage.getItem('airtableName'))
   const [airtableBaseId, setBaseId] = useState(localStorage.getItem('airtableId'))
-  const [miroId, setMiroId] = useState(localStorage.getItem('miroId'))
   const [danger, setDanger] = useState(false)
 
   useEffect(() => {
-    if (miroId && airtableBaseId && airtableBoardName && airtableApiKey) {
+    if (airtableBaseId && airtableBoardName && airtableApiKey) {
       setDanger(false)
     } else {
       setDanger(true)
     }
-  }, [miroId, airtableBaseId, airtableBoardName, airtableApiKey])
+  }, [airtableBaseId, airtableBoardName, airtableApiKey])
 
   return (
     <>
@@ -45,15 +44,9 @@ export const Auth = () => {
           value={airtableBoardName!}
           onChange={setBoardName}
         />
-        <Input<string>
-          label={'Miro board ID'}
-          value={miroId!}
-          onChange={setMiroId}
-        />
         <Button
           onClick={() =>
             setEnvVariables({
-              miroId: miroId!,
               airtableBaseId: airtableBaseId!,
               airtableBoardName: airtableBoardName!,
               airtableApiKey: airtableApiKey!,

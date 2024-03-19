@@ -12,26 +12,20 @@ export const RecordList = ({ data }: RecordListProps) => {
 
   return (
     <div>
-      {data ? (
-        <>
-          <TopicHeader
-            level={5}
-            children={`${data.records.length} - claimed homework`}
-          />
-          <div className={listStyle}>
-            {data!.records.map(item => {
-              return (
-                <RecordListItem
-                  key={item.id}
-                  title={item.fields.Name}
-                />
-              )
-            })}
-          </div>
-        </>
-      ) : (
-        <div className={'loading'}></div>
-      )}
+      <TopicHeader
+        level={5}
+        children={`${data.records.length} - claimed homework`}
+      />
+      <div className={listStyle}>
+        {data!.records.map(item => {
+          return (
+            <RecordListItem
+              key={item.id}
+              title={item.fields.Name}
+            />
+          )
+        })}
+      </div>
     </div>
   )
 }
