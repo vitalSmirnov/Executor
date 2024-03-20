@@ -44,7 +44,6 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
   return (
     <>
       <TopicHeader children={'Students homework'} />
-      {!isFetching && !isError && <RecordList data={data!} />}
       <Input<number>
         value={sizeValue}
         label={'Height'}
@@ -55,6 +54,7 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
         onClick={insertImages}
         title={'Export homework'}
       />
+      {!isFetching && !isError && <RecordList data={data!} />}
     </>
   )
 }

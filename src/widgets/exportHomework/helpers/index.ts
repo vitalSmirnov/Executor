@@ -11,7 +11,7 @@ export const getCenterViewport = (viewport: Rect) => {
 const createSticky = async (centeredViewport: { x: number; y: number }, part: number, item: Record) => {
   const sticky = await miro.board.createStickyNote({
     content: item.fields.Notes.slice(part * 2000, (part + 1) * 2000 - 1),
-    x: centeredViewport.x - 400,
+    x: centeredViewport.x - 300,
     y: centeredViewport.y + part,
   })
   await sticky.sync()
@@ -39,7 +39,7 @@ const createImage = async (
     url: image.url,
     height: sizeValue,
     y: centeredViewport.y + (number + 1) * sizeValue,
-    x: centeredViewport.x,
+    x: centeredViewport.x + 40,
   })
   await imageResponse.sync()
 }
