@@ -1,7 +1,7 @@
 import { RecordList } from '../../components'
 import { Button, TopicHeader, Input, useGetHomeworkQuery } from '../../shared'
 import { useState } from 'react'
-import { getCenterViewport } from './helpers'
+import { getCenterViewport, insertCard, insertImage, insertStickyNotes } from './helpers'
 
 interface HomeWorkDownloadButtonProps {
   errorCallback: () => void
@@ -29,45 +29,14 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
       const centeredViewport = getCenterViewport(viewport)
       centeredViewport.x += sizeValue * 3 * number
 
-      const card = await miro.board.createCard({
-        title: item.fields.Name,
-        description: item.fields.Notes,
-        x: centeredViewport.x,
-        y: centeredViewport.y,
-      })
-      await card.sync()
+      await insertCard(item, centeredViewport)
 
-      const valueOfStickies = item.fields.Notes.length / 1999
-
-      if (valueOfStickies > 1) {
-        for (let part = 0; part < valueOfStickies; part += 1) {
-          const sticky = await miro.board.createStickyNote({
-            content: item.fields.Notes.slice(part * 2000, (part + 1) * 2000 - 1),
-            x: centeredViewport.x - 400,
-            y: centeredViewport.y + part * 180,
-          })
-
-          await sticky.sync()
-        }
-      } else {
-        const sticky = await miro.board.createStickyNote({
-          content: item.fields.Notes,
-          x: centeredViewport.x - 400,
-          y: centeredViewport.y,
-        })
-        await sticky.sync()
+      if (item.fields.Notes) {
+        await insertStickyNotes(item, centeredViewport)
       }
 
       if (item.fields.Attachments) {
-        item.fields.Attachments.map(async (image, number) => {
-          const imageResponse = await miro.board.createImage({
-            url: image.url,
-            height: sizeValue,
-            y: centeredViewport.y + (number + 1) * sizeValue,
-            x: centeredViewport.x,
-          })
-          await imageResponse.sync()
-        })
+        await insertImage(item, centeredViewport, sizeValue)
       }
     })
   }
