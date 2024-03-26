@@ -1,7 +1,7 @@
 import { RecordList } from '../../components'
 import { Button, TopicHeader, Input, useGetHomeworkQuery } from '../../shared'
 import { useState } from 'react'
-import { getCenterViewport, insertCard, insertImage, insertStickyNotes } from './helpers'
+import { getCenterViewport, insertCard, insertImages, insertStickyNotes } from './helpers'
 
 interface HomeWorkDownloadButtonProps {
   errorCallback: () => void
@@ -13,6 +13,10 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
 
   const [sizeValue, setSizeValue] = useState<number>(300)
 
+  const setSize = (value: number) => {
+    setSizeValue(value)
+  }
+
   const { data, isError, isFetching } = useGetHomeworkQuery({
     tableId: tableId!,
     baseId: airtableBaseId!,
@@ -22,7 +26,7 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
     errorCallback()
   }
 
-  const insertImages = async () => {
+  const exportImages = async () => {
     const viewport = await miro.board.viewport.get()
 
     data!.records.map(async (item, number) => {
@@ -36,7 +40,7 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
       }
 
       if (item.fields.Attachments) {
-        await insertImage(item, centeredViewport, sizeValue)
+        await insertImages(item, centeredViewport, sizeValue)
       }
     })
   }
@@ -47,11 +51,11 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
       <Input<number>
         value={sizeValue}
         label={'Height'}
-        onChange={e => setSizeValue(e)}
+        onChange={setSize}
       />
       <Button
         disabled={isError}
-        onClick={insertImages}
+        onClick={exportImages}
         title={'Export homework'}
       />
       {!isFetching && !isError && <RecordList data={data!} />}

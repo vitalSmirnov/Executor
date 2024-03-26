@@ -37,16 +37,16 @@ const createImage = async (
 ) => {
   const imageResponse = await miro.board.createImage({
     url: image.url,
-    height: sizeValue,
+    height: Number(sizeValue),
     y: centeredViewport.y + (number + 1) * sizeValue,
     x: centeredViewport.x + 40,
   })
   await imageResponse.sync()
 }
 
-export const insertImage = async (item: Record, centeredViewport: { x: number; y: number }, sizeValue: number) => {
+export const insertImages = async (item: Record, centeredViewport: { x: number; y: number }, sizeValue: number) => {
   item.fields.Attachments.map(async (image, number) => {
-    createImage(sizeValue, image, centeredViewport, number)
+    await createImage(sizeValue, image, centeredViewport, number)
   })
 }
 
