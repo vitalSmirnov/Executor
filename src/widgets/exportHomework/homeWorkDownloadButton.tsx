@@ -31,7 +31,8 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
 
     data!.records.map(async (item, number) => {
       const centeredViewport = getCenterViewport(viewport)
-      centeredViewport.x += sizeValue * 3 * number
+      const multiply = sizeValue > 400 ? 1.5 : 2.5
+      centeredViewport.x += sizeValue * multiply * number
 
       await insertCard(item, centeredViewport)
 
