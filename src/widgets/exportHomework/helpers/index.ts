@@ -1,5 +1,6 @@
 import { Rect } from '@mirohq/websdk-types'
 import { Record, Work } from '../../../entities'
+import { GetAirTableResponse } from '../../../shared'
 
 export const getCenterViewport = (viewport: Rect) => {
   return {
@@ -17,7 +18,7 @@ const createSticky = async (centeredViewport: { x: number; y: number }, part: nu
   await sticky.sync()
 }
 
-export const insertStickyNotes = async (item: Record, centeredViewport: { x: number; y: number }) => {
+const insertStickyNotes = async (item: Record, centeredViewport: { x: number; y: number }) => {
   const valueOfStickies = item.fields.Notes.length / 1999
 
   if (valueOfStickies > 1) {
@@ -35,22 +36,22 @@ const createImage = async (
   centeredViewport: { x: number; y: number },
   number: number
 ) => {
-  const imageResponse = await miro.board.createImage({
+  const imageItem = await miro.board.createImage({
     url: image.url,
     height: Number(sizeValue),
-    y: centeredViewport.y + (number + 1) * sizeValue,
+    y: centeredViewport.y + (number + 1) * Number(sizeValue),
     x: centeredViewport.x + 40,
   })
-  await imageResponse.sync()
+  await imageItem.sync()
 }
 
-export const insertImages = async (item: Record, centeredViewport: { x: number; y: number }, sizeValue: number) => {
+const insertImages = async (item: Record, centeredViewport: { x: number; y: number }, sizeValue: number) => {
   item.fields.Attachments.map(async (image, number) => {
-    await createImage(sizeValue, image, centeredViewport, number)
+    await createImage(Number(sizeValue), image, centeredViewport, number)
   })
 }
 
-export const insertCard = async (item: Record, centeredViewport: { x: number; y: number }) => {
+const insertCard = async (item: Record, centeredViewport: { x: number; y: number }) => {
   const card = await miro.board.createCard({
     title: item.fields.Name,
     description: item.fields.Notes ? item.fields.Notes : 'empty',
@@ -58,4 +59,22 @@ export const insertCard = async (item: Record, centeredViewport: { x: number; y:
     y: centeredViewport.y,
   })
   await card.sync()
+}
+
+export const importHomework = async (data: GetAirTableResponse, sizeValue: number) => {
+  const viewport = await miro.board.viewport.get()
+  data!.records.map(async (item, number) => {
+    const centeredViewport = getCenterViewport(viewport)
+    centeredViewport.x += sizeValue * 2.5 * number
+
+    await insertCard(item, centeredViewport)
+
+    if (item.fields.Attachments) {
+      await insertImages(item, centeredViewport, sizeValue)
+    }
+
+    if (item.fields.Notes) {
+      await insertStickyNotes(item, centeredViewport)
+    }
+  })
 }

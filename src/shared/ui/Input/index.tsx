@@ -11,6 +11,7 @@ export const Input = <T extends InputTypes>({ label, value, onChange, step = 100
     <div className={'form-group cs1 ce12'}>
       <label>{label}</label>
       <input
+        min={typeof value === 'number' ? 0 : undefined}
         step={step}
         type={typeof value}
         className={'input'}

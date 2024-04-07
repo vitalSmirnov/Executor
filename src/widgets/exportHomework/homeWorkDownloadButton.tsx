@@ -1,7 +1,7 @@
 import { RecordList } from '../../components'
 import { Button, TopicHeader, Input, useGetHomeworkQuery } from '../../shared'
 import { useState } from 'react'
-import { getCenterViewport, insertCard, insertImages, insertStickyNotes } from './helpers'
+import { importHomework } from './helpers'
 
 interface HomeWorkDownloadButtonProps {
   errorCallback: () => void
@@ -11,7 +11,7 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
   const tableId = localStorage.getItem('airtableName')
   const airtableBaseId = localStorage.getItem('airtableId')
 
-  const [sizeValue, setSizeValue] = useState<number>(300)
+  const [sizeValue, setSizeValue] = useState<number>(1000)
 
   const setSize = (value: number) => {
     setSizeValue(value)
@@ -27,29 +27,14 @@ export const HomeWorkDownloadButton = ({ errorCallback }: HomeWorkDownloadButton
   }
 
   const exportImages = async () => {
-    const viewport = await miro.board.viewport.get()
-
-    data!.records.map(async (item, number) => {
-      const centeredViewport = getCenterViewport(viewport)
-      const multiply = sizeValue > 400 ? 1.5 : 2.5
-      centeredViewport.x += sizeValue * multiply * number
-
-      await insertCard(item, centeredViewport)
-
-      if (item.fields.Notes) {
-        await insertStickyNotes(item, centeredViewport)
-      }
-
-      if (item.fields.Attachments) {
-        await insertImages(item, centeredViewport, sizeValue)
-      }
-    })
+    await importHomework(data!, sizeValue)
   }
 
   return (
     <>
       <TopicHeader children={'Students homework'} />
       <Input<number>
+        step={100}
         value={sizeValue}
         label={'Height'}
         onChange={setSize}
