@@ -39,7 +39,7 @@ const createImage = async (
   const imageItem = await miro.board.createImage({
     url: image.url,
     height: Number(sizeValue),
-    y: centeredViewport.y + (number + 1) * Number(sizeValue),
+    y: centeredViewport.y + number * Number(sizeValue),
     x: centeredViewport.x + 40,
   })
   await imageItem.sync()
@@ -69,12 +69,13 @@ export const importHomework = async (data: GetAirTableResponse, sizeValue: numbe
 
     await insertCard(item, centeredViewport)
 
-    if (item.fields.Attachments) {
-      await insertImages(item, centeredViewport, sizeValue)
-    }
-
     if (item.fields.Notes) {
       await insertStickyNotes(item, centeredViewport)
+    }
+
+    if (item.fields.Attachments) {
+      centeredViewport.y += sizeValue * 0.7
+      await insertImages(item, centeredViewport, sizeValue)
     }
   })
 }
